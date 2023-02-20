@@ -5,6 +5,7 @@ import {
   TextInput,
   Text,
   ImageBackground,
+  TouchableOpacity,
 } from 'react-native';
 
 const initValue = {
@@ -12,7 +13,7 @@ const initValue = {
   password: '',
 };
 
-const Login = () => {
+const LoginScreen = () => {
   const [value, setValue] = useState(initValue);
 
   return (
@@ -26,16 +27,17 @@ const Login = () => {
           <TextInput
             placeholder="Адреса електронної пошти"
             value={value.name}
-            onChangeText={setValue(prevState => {
-              return { ...prevState, name: value };
-            })}
+            // onChangeText={setValue(prevState => ({
+            //   ...prevState,
+            //   name: value,
+            // }))}
           />
           <TextInput
             placeholder="Пароль"
             value={[value.password]}
-            onChangeText={setValue(prevState => {
-              return { ...prevState, password: value };
-            })}
+            // onChangeText={setValue(prevState => {
+            //   return { ...prevState, password: value };
+            // })}
           />
 
           <TouchableOpacity activeOpacity={0.8} style={styles.submitBtn}>
@@ -55,7 +57,8 @@ const styles = StyleSheet.create({
   bcgImage: {
     flex: 1,
     resizeMode: 'cover',
+    justifyContent: 'center',
   },
 });
 
-export default Login;
+export default LoginScreen;
