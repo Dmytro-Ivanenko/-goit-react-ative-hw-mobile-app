@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,8 +10,16 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
-  useWindowDimensions,
 } from 'react-native';
+import * as Font from 'expo-font';
+
+const loadFonts = async () => {
+  await Font.loadAsync({
+    'Roboto-Regulatr': require('../Fonts/Roboto-Regular.ttf'),
+    'Roboto-Bold': require('../Fonts/Roboto-Bold.ttf'),
+    'Roboto-Medium': require('../Fonts/Roboto-Medium.ttf'),
+  });
+};
 
 const initValue = {
   name: '',
@@ -21,26 +29,14 @@ const initValue = {
 const LoginScreen = () => {
   const [value, setValue] = useState(initValue);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  // const { width } = useWindowDimensions();
-  // const [dimensions, setDimensions] = useState(width - 16 * 2);
-
-  // useEffect(() => {
-  //   const onChange = () => {
-  //     const width = Dimensions.get('window').width - 16 * 2;
-
-  //     setDimensions(width);
-  //   };
-
-  //   Dimensions.addEventListener('change', onChange);
-
-  //   return () => {
-  //     Dimensions.removeEventListener('change', onChange);
-  //   };
-  // }, []);
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+  };
+
+  const handleSubmit = () => {
+    console.log(value);
     setValue(initValue);
   };
 
@@ -54,42 +50,40 @@ const LoginScreen = () => {
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           >
-            <View
-              style={{
-                ...styles.formContainer,
-                // marginBottom: isShowKeyboard ? -150 : 0,
-              }}
-            >
-              <View style={styles.form}>
-                <Text style={styles.formTitle}>Вхід</Text>
-                <TextInput
-                  style={{ ...styles.input, marginBottom: 16 }}
-                  placeholder="Адреса електронної пошти"
-                  value={value.name}
-                  onChangeText={value =>
-                    setValue(prevState => ({
-                      ...prevState,
-                      name: value,
-                    }))
-                  }
-                />
-                <TextInput
-                  style={{ ...styles.input, marginBottom: 43 }}
-                  placeholder="Пароль"
-                  value={[value.password]}
-                  secureTextEntry={true}
-                  onFocus={() => setIsShowKeyboard(true)}
-                  onChangeText={value =>
-                    setValue(prevState => {
-                      return { ...prevState, password: value };
-                    })
-                  }
-                />
+            <View style={styles.form}>
+              <Text style={styles.formTitle}>Вхід</Text>
+              <TextInput
+                style={{ ...styles.input, marginBottom: 16 }}
+                placeholder="Адреса електронної пошти"
+                value={value.name}
+                onFocus={() => setIsShowKeyboard(true)}
+                onChangeText={value =>
+                  setValue(prevState => ({
+                    ...prevState,
+                    name: value,
+                  }))
+                }
+              />
+              <TextInput
+                style={{ ...styles.input, marginBottom: 43 }}
+                placeholder="Пароль"
+                value={[value.password]}
+                secureTextEntry={true}
+                onFocus={() => setIsShowKeyboard(true)}
+                onChangeText={value =>
+                  setValue(prevState => {
+                    return { ...prevState, password: value };
+                  })
+                }
+              />
 
-                <TouchableOpacity activeOpacity={0.8} style={styles.submitBtn}>
-                  <Text style={styles.btnText}>Увійти</Text>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.submitBtn}
+                onPress={handleSubmit}
+              >
+                <Text style={styles.btnText}>Увійти</Text>
+              </TouchableOpacity>
             </View>
           </KeyboardAvoidingView>
         </ImageBackground>
@@ -109,25 +103,22 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
 
-  formContainer: {
+  form: {
+    justifyContent: 'flex-start',
+    textAlign: 'start',
     height: 489,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
     paddingTop: 32,
     backgroundColor: '#ffffff',
-  },
-
-  form: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    textAlign: 'start',
     paddingRight: 16,
     paddingLeft: 16,
   },
 
   formTitle: {
-    // fontWeight: 500,
     fontSize: 30,
+    fontStyle: 'Bold',
+    fontFamily: 'Roboto',
     justifyContent: 'center',
     textAlign: 'center',
     marginBottom: 33,
