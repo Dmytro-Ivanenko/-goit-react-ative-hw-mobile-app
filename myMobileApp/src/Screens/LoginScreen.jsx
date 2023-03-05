@@ -29,6 +29,8 @@ const initValue = {
 const LoginScreen = () => {
   const [value, setValue] = useState(initValue);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [isFocusMail, setIsFocusMail] = useState(false);
+  const [isFocusPassword, setIsFocusPassword] = useState(false);
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
@@ -47,16 +49,23 @@ const LoginScreen = () => {
           style={styles.bcgImage}
           source={require('../images/PhotoBG.png')}
         >
-          <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          <View
+            style={{ ...styles.form, marginBottom: isShowKeyboard ? -240 : 0 }}
           >
-            <View style={styles.form}>
+            <KeyboardAvoidingView behavior="position">
               <Text style={styles.formTitle}>Вхід</Text>
               <TextInput
-                style={{ ...styles.input, marginBottom: 16 }}
+                style={{
+                  ...styles.input,
+                  marginBottom: 16,
+                  ...(isFocusMail ? styles.inputFocus : null),
+                }}
                 placeholder="Адреса електронної пошти"
                 value={value.name}
-                onFocus={() => setIsShowKeyboard(true)}
+                onFocus={() => {
+                  setIsShowKeyboard(true), setIsFocusMail(true);
+                }}
+                onBlur={() => setIsFocusMail(false)}
                 onChangeText={value =>
                   setValue(prevState => ({
                     ...prevState,
@@ -65,11 +74,18 @@ const LoginScreen = () => {
                 }
               />
               <TextInput
-                style={{ ...styles.input, marginBottom: 43 }}
+                style={{
+                  ...styles.input,
+                  marginBottom: 43,
+                  ...(isFocusPassword ? styles.inputFocus : null),
+                }}
                 placeholder="Пароль"
-                value={[value.password]}
+                value={value.password}
                 secureTextEntry={true}
-                onFocus={() => setIsShowKeyboard(true)}
+                onFocus={() => {
+                  setIsShowKeyboard(true), setIsFocusPassword(true);
+                }}
+                onBlur={() => setIsFocusPassword(false)}
                 onChangeText={value =>
                   setValue(prevState => {
                     return { ...prevState, password: value };
@@ -84,8 +100,8 @@ const LoginScreen = () => {
               >
                 <Text style={styles.btnText}>Увійти</Text>
               </TouchableOpacity>
-            </View>
-          </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+          </View>
         </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
@@ -135,6 +151,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#F6F6F6',
 
     fontSize: 16,
+  },
+
+  inputFocus: {
+    borderColor: '#FF6C00',
+    backgroundColor: '#ffffff',
   },
 
   submitBtn: {
