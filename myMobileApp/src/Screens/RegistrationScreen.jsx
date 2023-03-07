@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -45,21 +45,18 @@ const RegistrationScreen = () => {
     setValue(initValue);
   };
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
+  useEffect(() => {
+    async function hideSplashScreen() {
       await SplashScreen.hideAsync();
+    }
+
+    if (fontsLoaded) {
+      hideSplashScreen();
     }
   }, [fontsLoaded]);
 
-  if (!fontsLoaded) {
-    return null;
-  }
-
   return (
-    <TouchableWithoutFeedback
-      onPress={keyboardHide}
-      onLayout={onLayoutRootView}
-    >
+    <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.bcgImage}
@@ -182,7 +179,7 @@ const styles = StyleSheet.create({
 
   formTitle: {
     fontSize: 30,
-    fontStyle: 'Bold',
+    fontStyle: 'bold',
     fontFamily: 'Roboto',
     justifyContent: 'center',
     textAlign: 'center',

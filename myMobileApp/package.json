@@ -12,16 +12,17 @@
     "@expo/webpack-config": "^0.17.2",
     "expo": "~47.0.12",
     "expo-font": "~11.0.1",
+    "expo-modules-core": "~1.0.4 || ~1.1.1",
+    "expo-splash-screen": "~0.17.5",
     "expo-status-bar": "~1.4.2",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-native": "0.70.5",
-    "react-native-web": "~0.18.9",
-    "expo-modules-core": "~1.0.4 || ~1.1.1",
-    "expo-splash-screen": "~0.17.5"
+    "react-native-web": "~0.18.9"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "eslint": "^8.35.0",
     "eslint-plugin-react": "^7.32.2"
   },
   "private": true
