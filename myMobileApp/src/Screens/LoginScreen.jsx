@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,15 +11,10 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-import * as Font from 'expo-font';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 
-const loadFonts = async () => {
-  await Font.loadAsync({
-    'Roboto-Regulatr': require('../Fonts/Roboto-Regular.ttf'),
-    'Roboto-Bold': require('../Fonts/Roboto-Bold.ttf'),
-    'Roboto-Medium': require('../Fonts/Roboto-Medium.ttf'),
-  });
-};
+SplashScreen.preventAutoHideAsync();
 
 const initValue = {
   name: '',
@@ -32,6 +27,12 @@ const LoginScreen = () => {
   const [isFocusMail, setIsFocusMail] = useState(false);
   const [isFocusPassword, setIsFocusPassword] = useState(false);
 
+  const [fontsLoaded] = useFonts({
+    'Roboto-Regular': require('./Fonts/Roboto-Regular.ttf'),
+    'Roboto-Bold': require('./Fonts/Roboto-Bold.ttf'),
+    'Roboto-Medium': require('./Fonts/Roboto-Medium.ttf'),
+  });
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
@@ -42,8 +43,21 @@ const LoginScreen = () => {
     setValue(initValue);
   };
 
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
+    <TouchableWithoutFeedback
+      onPress={keyboardHide}
+      onLayout={onLayoutRootView}
+    >
       <View style={styles.container}>
         <ImageBackground
           style={styles.bcgImage}
@@ -52,7 +66,9 @@ const LoginScreen = () => {
           <View
             style={{ ...styles.form, marginBottom: isShowKeyboard ? -240 : 0 }}
           >
-            <KeyboardAvoidingView behavior="position">
+            <KeyboardAvoidingView
+              behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+            >
               <Text style={styles.formTitle}>Вхід</Text>
               <TextInput
                 style={{
@@ -151,6 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F6F6F6',
 
     fontSize: 16,
+    fontFamily: 'Roboto',
   },
 
   inputFocus: {
@@ -172,6 +189,8 @@ const styles = StyleSheet.create({
   btnText: {
     textAlign: 'center',
     fontSize: 16,
+    fontFamily: 'Roboto',
+    color: '#ffffff',
     lineHeight: 19,
   },
 });
