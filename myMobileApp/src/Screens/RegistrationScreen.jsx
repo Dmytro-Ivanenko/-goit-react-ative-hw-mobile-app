@@ -11,10 +11,6 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-
-SplashScreen.preventAutoHideAsync();
 
 const initValue = {
   login: '',
@@ -29,12 +25,6 @@ const RegistrationScreen = () => {
   const [isFocusMail, setIsFocusMail] = useState(false);
   const [isFocusPassword, setIsFocusPassword] = useState(false);
 
-  const [fontsLoaded] = useFonts({
-    'Roboto-Regular': require('./Fonts/Roboto-Regular.ttf'),
-    'Roboto-Bold': require('./Fonts/Roboto-Bold.ttf'),
-    'Roboto-Medium': require('./Fonts/Roboto-Medium.ttf'),
-  });
-
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
@@ -44,16 +34,6 @@ const RegistrationScreen = () => {
     console.log(value);
     setValue(initValue);
   };
-
-  useEffect(() => {
-    async function hideSplashScreen() {
-      await SplashScreen.hideAsync();
-    }
-
-    if (fontsLoaded) {
-      hideSplashScreen();
-    }
-  }, [fontsLoaded]);
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
@@ -180,7 +160,7 @@ const styles = StyleSheet.create({
   formTitle: {
     fontSize: 30,
     fontStyle: 'bold',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Bold',
     justifyContent: 'center',
     textAlign: 'center',
     marginBottom: 33,
@@ -219,7 +199,7 @@ const styles = StyleSheet.create({
   btnText: {
     textAlign: 'center',
     fontSize: 16,
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Regular',
     color: '#ffffff',
     lineHeight: 19,
   },
