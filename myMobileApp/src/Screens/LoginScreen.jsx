@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
+  Button,
 } from 'react-native';
 
 const initValue = {
@@ -17,12 +18,12 @@ const initValue = {
   password: '',
 };
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [value, setValue] = useState(initValue);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [isFocusMail, setIsFocusMail] = useState(false);
   const [isFocusPassword, setIsFocusPassword] = useState(false);
-
+  `1`;
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
@@ -93,6 +94,16 @@ const LoginScreen = () => {
               >
                 <Text style={styles.btnText}>Увійти</Text>
               </TouchableOpacity>
+
+              <View style={styles.navigationContainer}>
+                <Text style={styles.navigationText}>Немає аккаунту?</Text>
+
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Registration')}
+                >
+                  <Text style={styles.navigationText}> Зареєструватись</Text>
+                </TouchableOpacity>
+              </View>
             </KeyboardAvoidingView>
           </View>
         </ImageBackground>
@@ -127,7 +138,7 @@ const styles = StyleSheet.create({
   formTitle: {
     fontSize: 30,
     fontStyle: 'bold',
-    fontFamily: 'Roboto-Bold',
+    // fontFamily: 'Roboto-Bold',
     justifyContent: 'center',
     textAlign: 'center',
     marginBottom: 33,
@@ -144,7 +155,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F6F6F6',
 
     fontSize: 16,
-    fontFamily: 'Roboto-Regular',
+    // fontFamily: 'Roboto-Regular',
   },
 
   inputFocus: {
@@ -161,14 +172,28 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingRight: 32,
     paddingLeft: 32,
+    marginBottom: 16,
   },
 
   btnText: {
     textAlign: 'center',
     fontSize: 16,
-    fontFamily: 'Roboto-Regular',
+    // fontFamily: 'Roboto-Regular',
     color: '#ffffff',
     lineHeight: 19,
+  },
+
+  navigationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 'auto',
+    marginLeft: 'auto',
+  },
+  navigationText: {
+    fontSize: 16,
+    color: '#1B4371',
+    textAlign: 'center',
   },
 });
 

@@ -18,7 +18,7 @@ const initValue = {
   password: '',
 };
 
-const RegistrationScreen = () => {
+const RegistrationScreen = ({ navigation }) => {
   const [value, setValue] = useState(initValue);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [isFocusLogin, setIsFocusLogin] = useState(false);
@@ -115,6 +115,14 @@ const RegistrationScreen = () => {
               >
                 <Text style={styles.btnText}>Зареєструватись</Text>
               </TouchableOpacity>
+
+              <View style={styles.navigationContainer}>
+                <Text style={styles.navigationText}>Вже є аккаунт?</Text>
+
+                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                  <Text style={styles.navigationText}> Увійти</Text>
+                </TouchableOpacity>
+              </View>
             </KeyboardAvoidingView>
           </View>
         </ImageBackground>
@@ -160,7 +168,7 @@ const styles = StyleSheet.create({
   formTitle: {
     fontSize: 30,
     fontStyle: 'bold',
-    fontFamily: 'Roboto-Bold',
+    // fontFamily: 'Roboto-Bold',
     justifyContent: 'center',
     textAlign: 'center',
     marginBottom: 33,
@@ -194,14 +202,28 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingRight: 32,
     paddingLeft: 32,
+
+    marginBottom: 16,
   },
 
   btnText: {
     textAlign: 'center',
     fontSize: 16,
-    fontFamily: 'Roboto-Regular',
+    // fontFamily: 'Roboto-Regular',
     color: '#ffffff',
     lineHeight: 19,
+  },
+  navigationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 'auto',
+    marginLeft: 'auto',
+  },
+  navigationText: {
+    fontSize: 16,
+    color: '#1B4371',
+    textAlign: 'center',
   },
 });
 
