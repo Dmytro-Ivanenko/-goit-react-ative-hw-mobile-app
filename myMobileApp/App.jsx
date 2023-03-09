@@ -4,8 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useCustomFonts } from './src/shared/hooks/useCustomFont';
 import * as SplashScreen from 'expo-splash-screen';
 
-import LoginScreen from './src/Screens/LoginScreen';
-import RegistrationScreen from './src/Screens/RegistrationScreen';
+import LoginScreen from './src/Screens/auth/LoginScreen';
+import RegistrationScreen from './src/Screens/auth/RegistrationScreen';
 import Home from './src/Screens/Home';
 
 const MainStack = createStackNavigator();

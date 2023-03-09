@@ -32,6 +32,7 @@ const LoginScreen = ({ navigation }) => {
   const handleSubmit = () => {
     console.log(value);
     setValue(initValue);
+    navigation.navigate('Home');
   };
 
   return (
@@ -39,7 +40,7 @@ const LoginScreen = ({ navigation }) => {
       <View style={styles.container}>
         <ImageBackground
           style={styles.bcgImage}
-          source={require('../images/PhotoBG.png')}
+          source={require('../../images/PhotoBG.png')}
         >
           <View
             style={{ ...styles.form, marginBottom: isShowKeyboard ? -240 : 0 }}
@@ -87,6 +88,7 @@ const LoginScreen = ({ navigation }) => {
                 }
               />
 
+              {/* Navigation */}
               <TouchableOpacity
                 activeOpacity={0.8}
                 style={styles.submitBtn}

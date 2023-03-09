@@ -33,6 +33,7 @@ const RegistrationScreen = ({ navigation }) => {
   const handleSubmit = () => {
     console.log(value);
     setValue(initValue);
+    navigation.navigate('Home');
   };
 
   return (
@@ -40,7 +41,7 @@ const RegistrationScreen = ({ navigation }) => {
       <View style={styles.container}>
         <ImageBackground
           style={styles.bcgImage}
-          source={require('../images/PhotoBG.png')}
+          source={require('../../images/PhotoBG.png')}
         >
           <View style={styles.photoContainer}></View>
           <View
@@ -116,6 +117,7 @@ const RegistrationScreen = ({ navigation }) => {
                 <Text style={styles.btnText}>Зареєструватись</Text>
               </TouchableOpacity>
 
+              {/* Navigation */}
               <View style={styles.navigationContainer}>
                 <Text style={styles.navigationText}>Вже є аккаунт?</Text>
 

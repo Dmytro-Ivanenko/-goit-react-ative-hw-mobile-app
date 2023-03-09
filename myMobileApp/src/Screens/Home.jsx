@@ -10,10 +10,10 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-const Home = () => {
-  const [value, setValue] = useState(initValue);
+import PostsScreen from './PostsScreen';
 
-  return <View style={styles.container}></View>;
+const Home = ({ navigation }) => {
+  return <PostsScreen />;
 };
 
 const styles = StyleSheet.create({});
