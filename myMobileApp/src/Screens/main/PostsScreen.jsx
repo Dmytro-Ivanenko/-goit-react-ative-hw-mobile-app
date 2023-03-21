@@ -18,7 +18,7 @@ const PostsScreen = ({ navigation }) => {
       <View style={styles.profileContainer}>
         <Image
           style={styles.profilePhoto}
-          source={require('../images/profilePhoto.jpg')}
+          source={require('../../images/profilePhoto.jpg')}
         />
         <View style={styles.profileInfo}>
           <Text style={styles.profileName}>Natali Romanova</Text>
