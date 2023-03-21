@@ -21,7 +21,6 @@ const BtnLogOut = () => {
 const styles = StyleSheet.create({
   BtnLogOut: {
     color: '#BDBDBD',
-    marginRight: 10,
   },
 });
 

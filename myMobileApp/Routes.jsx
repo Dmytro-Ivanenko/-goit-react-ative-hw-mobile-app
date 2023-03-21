@@ -13,7 +13,9 @@ import PostsScreen from './src/Screens/main/PostsScreen';
 import CreatePostScreen from './src/Screens/main/CreatePostScreen';
 import ProfileScreen from './src/Screens/main/ProfileScreen';
 
+// options
 import {
+  screenOptions,
   postsOptions,
   createPostOptions,
   profileOptions,
@@ -70,7 +72,7 @@ const useRoute = isAuth => {
     );
   }
   return (
-    <MainTab.Navigator screenOptions={{ tabBarShowLabel: false }}>
+    <MainTab.Navigator screenOptions={screenOptions}>
       <MainTab.Screen
         options={postsOptions}
         name="Публікації"
