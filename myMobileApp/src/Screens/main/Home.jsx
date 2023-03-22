@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const MainTab = createBottomTabNavigator();
 
@@ -26,6 +26,7 @@ const Home = ({ navigation }) => {
         name="Створити публікацю"
         component={CreatePostScreen}
       />
+
       <MainTab.Screen
         options={profileOptions}
         name="Профіль"

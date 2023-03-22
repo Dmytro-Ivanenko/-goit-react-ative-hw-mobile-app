@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import * as Font from 'expo-font';
-import { AppLoading } from 'expo';
+// import * as Font from 'expo-font';
+// import { AppLoading } from 'expo';
 
 // screens
 import LoginScreen from './src/Screens/auth/LoginScreen';
@@ -23,32 +23,30 @@ const AuthStack = createStackNavigator();
 // };
 
 const useRoute = isAuth => {
-  if (!isAuth) {
-    return (
-      <AuthStack.Navigator initialRouteName="Login">
-        <AuthStack.Screen
-          options={{ headerShown: false }}
-          name="Registration"
-          component={RegistrationScreen}
-        />
-        <AuthStack.Screen
-          options={{ headerShown: false }}
-          name="Login"
-          component={LoginScreen}
-        />
-        {/* <AuthStack.Screen
-           name="Home"
-           component={Home}
-         /> */}
-      </AuthStack.Navigator>
-    );
-  }
-  return <Home />;
+  return (
+    <AuthStack.Navigator initialRouteName="Login">
+      <AuthStack.Screen
+        options={{ headerShown: false }}
+        name="Registration"
+        component={RegistrationScreen}
+      />
+      <AuthStack.Screen
+        options={{ headerShown: false }}
+        name="Login"
+        component={LoginScreen}
+      />
+      <AuthStack.Screen
+        options={{ headerShown: false }}
+        name="Home"
+        component={Home}
+      />
+    </AuthStack.Navigator>
+  );
 };
 
 export default function Routes() {
-  const [isReady, setIsReady] = useState(false);
-  const routing = useRoute(true);
+  // const [isReady, setIsReady] = useState(false);
+  const routing = useRoute();
   //   if (!isReady) {
   //     return (
   //       <AppLoading
