@@ -24,6 +24,7 @@ export const createPostOptions = {
 };
 
 export const profileOptions = {
+  headerShown: false,
   tabBarIcon: ({ focused, size, color }) => (
     <Feather name="user" size={24} color="black" />
   ),

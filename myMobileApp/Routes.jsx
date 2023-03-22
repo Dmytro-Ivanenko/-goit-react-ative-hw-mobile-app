@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
@@ -9,20 +8,11 @@ import { AppLoading } from 'expo';
 // screens
 import LoginScreen from './src/Screens/auth/LoginScreen';
 import RegistrationScreen from './src/Screens/auth/RegistrationScreen';
-import PostsScreen from './src/Screens/main/PostsScreen';
-import CreatePostScreen from './src/Screens/main/CreatePostScreen';
-import ProfileScreen from './src/Screens/main/ProfileScreen';
+import Home from './src/Screens/main/Home';
 
 // options
-import {
-  screenOptions,
-  postsOptions,
-  createPostOptions,
-  profileOptions,
-} from './src/shared/options/tabOptions';
 
 const AuthStack = createStackNavigator();
-const MainTab = createBottomTabNavigator();
 
 // const loadApplication = async () => {
 //   await Font.loadAsync({
@@ -47,49 +37,13 @@ const useRoute = isAuth => {
           component={LoginScreen}
         />
         {/* <AuthStack.Screen
-           options={{
-             title: 'Публікації',
-             headerLeft: null,
-             headerStyle: {
-               backgroundColor: '#fff',
-             },
-             headerTintColor: '#212121',
-             headerTitleStyle: {
-               fontWeight: '500',
-               fontSize: 17,
-               lineHeight: 22,
-             },
-             headerTitleContainerStyle: {
-               width: '100%',
-               alignItems: 'center',
-             },
-             headerRight: () => <LogoutButton />,
-           }}
            name="Home"
            component={Home}
          /> */}
       </AuthStack.Navigator>
     );
   }
-  return (
-    <MainTab.Navigator screenOptions={screenOptions}>
-      <MainTab.Screen
-        options={postsOptions}
-        name="Публікації"
-        component={PostsScreen}
-      />
-      <MainTab.Screen
-        options={createPostOptions}
-        name="Створити публікацю"
-        component={CreatePostScreen}
-      />
-      <MainTab.Screen
-        options={profileOptions}
-        name="Профіль"
-        component={ProfileScreen}
-      />
-    </MainTab.Navigator>
-  );
+  return <Home />;
 };
 
 export default function Routes() {

@@ -1,21 +1,38 @@
 import React, { useState, useEffect } from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+const MainTab = createBottomTabNavigator();
+
 import {
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-  TextInput,
-  TouchableOpacity,
-  Platform,
-  TouchableWithoutFeedback,
-} from 'react-native';
+  screenOptions,
+  postsOptions,
+  createPostOptions,
+  profileOptions,
+} from '../../shared/options/tabOptions';
 
 import PostsScreen from './PostsScreen';
+import CreatePostScreen from './CreatePostScreen';
+import ProfileScreen from './ProfileScreen';
 
 const Home = ({ navigation }) => {
-  return <PostsScreen />;
+  return (
+    <MainTab.Navigator screenOptions={screenOptions}>
+      <MainTab.Screen
+        options={postsOptions}
+        name="Публікації"
+        component={PostsScreen}
+      />
+      <MainTab.Screen
+        options={createPostOptions}
+        name="Створити публікацю"
+        component={CreatePostScreen}
+      />
+      <MainTab.Screen
+        options={profileOptions}
+        name="Профіль"
+        component={ProfileScreen}
+      />
+    </MainTab.Navigator>
+  );
 };
-
-const styles = StyleSheet.create({});
 
 export default Home;
