@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     paddingTop: 32,
     paddingRight: 16,
     paddingLeft: 16,
+    backgroundColor: '#fff',
   },
   profileContainer: {
     flexDirection: 'row',

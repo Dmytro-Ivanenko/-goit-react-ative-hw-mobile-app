@@ -23,7 +23,7 @@ const Home = ({ navigation }) => {
       />
       <MainTab.Screen
         options={createPostOptions}
-        name="Створити публікацю"
+        name="Створити публікацію"
         component={CreatePostScreen}
       />
 
