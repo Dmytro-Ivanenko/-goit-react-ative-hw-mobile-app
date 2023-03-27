@@ -1,27 +1,21 @@
 import { StyleSheet, TouchableOpacity } from 'react-native';
-// import { useDispatch } from 'react-redux';
-// import { authSignOutUser } from '../../redux/auth/authOperations';
 
 import { Feather } from '@expo/vector-icons';
 
-const BtnLogOut = () => {
-  //   const dispatch = useDispatch();
-
-  const singOut = () => {
-    //   dispatch(authSignOutUser());
-  };
+const LogoutButton = () => {
+  const singOut = () => {};
 
   return (
     <TouchableOpacity onPress={singOut}>
-      <Feather name="log-out" size={24} style={styles.BtnLogOut} />
+      <Feather name="log-out" size={24} style={styles.LogoutButton} />
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  BtnLogOut: {
+  LogoutButton: {
     color: '#BDBDBD',
   },
 });
 
-export default BtnLogOut;
+export default LogoutButton;
