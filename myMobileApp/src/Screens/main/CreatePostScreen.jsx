@@ -11,15 +11,26 @@ import {
   TouchableWithoutFeedback,
   ImageBackground,
 } from 'react-native';
+import { Camera, CameraType } from 'expo-camera';
+import * as MediaLibrary from 'expo-media-library';
 import { Ionicons } from '@expo/vector-icons';
 
 const CreatePostScreen = ({ navigation }) => {
   const [image, setImage] = useState(null);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [cameraRef, setCameraRef] = useState(null);
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
 
+  useEffect(() => {
+    (async () => {
+      await MediaLibrary.requestPermissionsAsync();
+      await requestPermission();
+    })();
+  }, []);
+
   const handleImageUpload = () => {
-    // Add logic to handle image upload
+    console.log(cameraRef);
   };
 
   const handlePublish = () => {
@@ -32,21 +43,22 @@ const CreatePostScreen = ({ navigation }) => {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <TouchableOpacity
-        style={styles.imageContainer}
-        onPress={handleImageUpload}
-      >
-        <ImageBackground
-          style={styles.bcgImage}
-          source={image}
-          borderRadius={8}
+      <View style={styles.cameraContainer}>
+        <Camera
+          style={styles.camera}
+          type={CameraType.back}
+          ref={setCameraRef}
+          ratio="4:3"
         >
-          <View style={styles.cameraIconContainer}>
-            <Ionicons name="camera" size={24} color="#BDBDBD" />
-          </View>
-        </ImageBackground>
+          <TouchableOpacity
+            style={styles.cameraIconContainer}
+            onPress={handleImageUpload}
+          >
+            <Ionicons name="camera" size={24} color="#fff" />
+          </TouchableOpacity>
+        </Camera>
         <Text style={{ color: '#BDBDBD' }}>Завантажте фото</Text>
-      </TouchableOpacity>
+      </View>
 
       <TextInput
         style={styles.input}
@@ -86,22 +98,22 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     backgroundColor: '#fff',
   },
-  imageContainer: {
+
+  cameraContainer: {
     marginBottom: 32,
   },
-  bcgImage: {
+  camera: {
     height: 240,
-    backgroundColor: '#ccc',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
-    borderRadius: 8,
   },
+
   cameraIconContainer: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
     justifyContent: 'center',
     alignItems: 'center',
   },
