@@ -9,16 +9,21 @@ import {
   Platform,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
-  ImageBackground,
+  Dimensions,
+  Keyboard,
 } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { Ionicons } from '@expo/vector-icons';
 
+const { width, height } = Dimensions.get('window');
+const cameraHeight = width - 32;
+
 const CreatePostScreen = ({ navigation }) => {
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState('');
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [cameraRef, setCameraRef] = useState(null);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
 
@@ -29,8 +34,14 @@ const CreatePostScreen = ({ navigation }) => {
     })();
   }, []);
 
-  const handleImageUpload = () => {
-    console.log(cameraRef);
+  const keyboardHide = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+  };
+
+  const handleImageUpload = async () => {
+    const { uri } = await cameraRef.takePictureAsync();
+    setImage(uri);
   };
 
   const handlePublish = () => {
@@ -39,54 +50,74 @@ const CreatePostScreen = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <View style={styles.cameraContainer}>
-        <Camera
-          style={styles.camera}
-          type={CameraType.back}
-          ref={setCameraRef}
-          ratio="4:3"
-        >
-          <TouchableOpacity
-            style={styles.cameraIconContainer}
-            onPress={handleImageUpload}
-          >
-            <Ionicons name="camera" size={24} color="#fff" />
-          </TouchableOpacity>
-        </Camera>
-        <Text style={{ color: '#BDBDBD' }}>Завантажте фото</Text>
-      </View>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Назва..."
-        value={title}
-        onChangeText={setTitle}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Місцевість..."
-        value={location}
-        onChangeText={setLocation}
-      />
-      <TouchableOpacity
-        disabled={!title || !location}
-        style={{
-          ...styles.uploadButton,
-          ...(title && location ? styles.publishButton : styles.disabledButton),
-        }}
-        onPress={handlePublish}
+    <TouchableWithoutFeedback onPress={keyboardHide}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <Text
-          style={title && location ? styles.publishText : styles.disabledText}
+        <View style={styles.cameraContainer}>
+          <Camera
+            style={{
+              ...styles.camera,
+              height: isShowKeyboard ? 100 : cameraHeight,
+            }}
+            type={CameraType.back}
+            ref={setCameraRef}
+            ratio="1:1"
+          >
+            <View style={styles.photoContainer}>
+              <Image
+                source={{ uri: image }}
+                style={{ height: 100, width: 100 }}
+              />
+            </View>
+
+            <TouchableOpacity
+              style={styles.cameraIconContainer}
+              onPress={handleImageUpload}
+            >
+              <Ionicons name="camera" size={24} color="#fff" />
+            </TouchableOpacity>
+          </Camera>
+          <Text style={{ color: '#BDBDBD' }}>Завантажте фото</Text>
+        </View>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Назва..."
+          value={title}
+          onChangeText={setTitle}
+          onFocus={() => {
+            setIsShowKeyboard(true);
+          }}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Місцевість..."
+          value={location}
+          onChangeText={setLocation}
+          onFocus={() => {
+            setIsShowKeyboard(true);
+          }}
+        />
+        <TouchableOpacity
+          disabled={!title || !location}
+          style={{
+            ...styles.uploadButton,
+            ...(title && location
+              ? styles.publishButton
+              : styles.disabledButton),
+          }}
+          onPress={handlePublish}
         >
-          Опублікувати
-        </Text>
-      </TouchableOpacity>
-    </KeyboardAvoidingView>
+          <Text
+            style={title && location ? styles.publishText : styles.disabledText}
+          >
+            Опублікувати
+          </Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -103,10 +134,17 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   camera: {
-    height: 240,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
+  },
+  photoContainer: {
+    position: 'absolute',
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+    top: 0,
+    left: 0,
   },
 
   cameraIconContainer: {
