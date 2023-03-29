@@ -12,7 +12,23 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-const PostsScreen = ({ navigation }) => {
+const PostsScreen = ({ route }) => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    if (!route.params) {
+      return;
+    }
+
+    const { image, title, location } = route.params;
+
+    setPosts(prevState => {
+      return [...prevState, { image, title, location }];
+    });
+
+    console.log(posts);
+  }, [route.params]);
+
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>

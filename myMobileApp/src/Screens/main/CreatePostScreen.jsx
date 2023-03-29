@@ -45,8 +45,19 @@ const CreatePostScreen = ({ navigation }) => {
   };
 
   const handlePublish = () => {
-    // Add logic to publish post
     console.log('Фото опубліковане');
+
+    const postData = {
+      image,
+      title,
+      location,
+    };
+
+    setImage('');
+    setTitle('');
+    setLocation('');
+
+    navigation.navigate('Публікації', postData);
   };
 
   return (
@@ -65,12 +76,14 @@ const CreatePostScreen = ({ navigation }) => {
             ref={setCameraRef}
             ratio="1:1"
           >
-            <View style={styles.photoContainer}>
-              <Image
-                source={{ uri: image }}
-                style={{ height: 100, width: 100 }}
-              />
-            </View>
+            {image && (
+              <View style={styles.photoContainer}>
+                <Image
+                  source={{ uri: image }}
+                  style={{ height: 100, width: 100 }}
+                />
+              </View>
+            )}
 
             <TouchableOpacity
               style={styles.cameraIconContainer}
@@ -101,17 +114,21 @@ const CreatePostScreen = ({ navigation }) => {
           }}
         />
         <TouchableOpacity
-          disabled={!title || !location}
+          disabled={!title || !location || !image}
           style={{
             ...styles.uploadButton,
-            ...(title && location
+            ...(image && title && location
               ? styles.publishButton
               : styles.disabledButton),
           }}
           onPress={handlePublish}
         >
           <Text
-            style={title && location ? styles.publishText : styles.disabledText}
+            style={
+              image && title && location
+                ? styles.publishText
+                : styles.disabledText
+            }
           >
             Опублікувати
           </Text>
@@ -170,7 +187,7 @@ const styles = StyleSheet.create({
 
   uploadButton: {
     padding: 12,
-    borderRadius: 4,
+    borderRadius: 100,
     alignItems: 'center',
     marginTop: 32,
   },
