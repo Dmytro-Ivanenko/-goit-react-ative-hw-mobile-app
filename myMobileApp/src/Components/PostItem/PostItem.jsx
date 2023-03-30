@@ -2,7 +2,10 @@ import React from 'react';
 import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
-const PostItem = ({ image, title, location }) => {
+const PostItem = ({ image, title, location, navigation }) => {
+  console.log(location);
+  const { locationTitle, geoPosition } = location;
+
   return (
     <View style={styles.PostContainer}>
       <Image style={styles.image} source={{ uri: image }}></Image>
@@ -12,7 +15,7 @@ const PostItem = ({ image, title, location }) => {
         <TouchableOpacity
           style={styles.comments}
           onPress={() => {
-            console.log('comment');
+            navigation.navigate('Коментарі');
           }}
         >
           <Feather name="message-circle" size={24} color="#BDBDBD" />
@@ -22,14 +25,14 @@ const PostItem = ({ image, title, location }) => {
         <TouchableOpacity
           style={styles.location}
           onPress={() => {
-            console.log('map');
+            navigation.navigate('Мапа', { location });
           }}
         >
           <Feather name="map-pin" size={24} color="#BDBDBD" />
           <Text
             style={{ ...styles.addInfoText, textDecorationLine: 'underline' }}
           >
-            {location}
+            {locationTitle}
           </Text>
         </TouchableOpacity>
       </View>

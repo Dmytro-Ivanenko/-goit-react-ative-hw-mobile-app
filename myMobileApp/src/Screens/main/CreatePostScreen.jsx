@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   StyleSheet,
@@ -19,7 +19,7 @@ import * as MediaLibrary from 'expo-media-library';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const cameraHeight = width - 32;
 
 const CreatePostScreen = ({ navigation }) => {
@@ -29,7 +29,7 @@ const CreatePostScreen = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [isScreenFocused, setScreenFocus] = useState(false);
   const [title, setTitle] = useState('');
-  const [location, setLocation] = useState('');
+  const [locationTitle, setLocationTitle] = useState('');
 
   useFocusEffect(
     React.useCallback(() => {
@@ -51,29 +51,32 @@ const CreatePostScreen = ({ navigation }) => {
     Keyboard.dismiss();
   };
 
+  // add Photo
   const handleImageUpload = async () => {
     const { uri } = await cameraRef.takePictureAsync();
     setImage(uri);
   };
 
+  // Publication
   const handlePublish = async () => {
     console.log('Фото опубліковане');
 
     const geoPosition = await Location.getCurrentPositionAsync({});
-    console.log(geoPosition);
 
     const postData = {
       image,
       title,
-      location,
-      geoPosition,
+      locationData: {
+        geoPosition,
+        locationTitle,
+      },
     };
 
     setImage('');
     setTitle('');
-    setLocation('');
+    setLocationTitle('');
 
-    navigation.navigate('Публікації', postData);
+    navigation.navigate('Пости', postData);
   };
 
   return (
@@ -125,17 +128,17 @@ const CreatePostScreen = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Місцевість..."
-          value={location}
-          onChangeText={setLocation}
+          value={locationTitle}
+          onChangeText={setLocationTitle}
           onFocus={() => {
             setIsShowKeyboard(true);
           }}
         />
         <TouchableOpacity
-          disabled={!title || !location || !image}
+          disabled={!title || !locationTitle || !image}
           style={{
             ...styles.uploadButton,
-            ...(image && title && location
+            ...(image && title && locationTitle
               ? styles.publishButton
               : styles.disabledButton),
           }}
@@ -143,7 +146,7 @@ const CreatePostScreen = ({ navigation }) => {
         >
           <Text
             style={
-              image && title && location
+              image && title && locationTitle
                 ? styles.publishText
                 : styles.disabledText
             }

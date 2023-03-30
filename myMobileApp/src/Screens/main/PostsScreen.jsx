@@ -1,82 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import PostItem from '../../Components/PostItem/PostItem';
+import DefaultScreen from '../nested/DefaultScreen';
+import CommentsScreen from '../nested/CommentsScreen';
+import MapScreen from '../nested/MapScreen';
 
-const PostsScreen = ({ route }) => {
-  const [posts, setPosts] = useState([]);
+const NestedScreen = createStackNavigator();
 
-  useEffect(() => {
-    if (!route.params) {
-      return;
-    }
-
-    const { image, title, location } = route.params;
-
-    setPosts(prevState => {
-      return [...prevState, { image, title, location }];
-    });
-  }, [route.params]);
-  console.log(posts);
-
+const PostsScreen = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.profileContainer}>
-        <Image
-          style={styles.profilePhoto}
-          source={require('../../images/profilePhoto.jpg')}
-        />
-        <View style={styles.profileInfo}>
-          <Text style={styles.profileName}>Natali Romanova</Text>
-          <Text style={styles.profileMail}>email@example.com</Text>
-        </View>
-      </View>
-
-      <FlatList
-        data={posts}
-        renderItem={({ item }) => (
-          <PostItem
-            image={item.image}
-            title={item.title}
-            location={item.location}
-          />
-        )}
-        keyExtractor={(item, index) => index.toString()}
+    <NestedScreen.Navigator initialRouteName="Пости">
+      <NestedScreen.Screen
+        options={{ headerShown: false }}
+        name="Пости"
+        component={DefaultScreen}
       />
-    </View>
+      <NestedScreen.Screen
+        options={{ headerTitleAlign: 'center' }}
+        name="Коментарі"
+        component={CommentsScreen}
+      />
+      <NestedScreen.Screen
+        options={{ headerTitleAlign: 'center' }}
+        name="Мапа"
+        component={MapScreen}
+      />
+    </NestedScreen.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 32,
-    paddingRight: 16,
-    paddingLeft: 16,
-    backgroundColor: '#fff',
-  },
-  profileContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignSelf: 'flex-start',
-    marginBottom: 32,
-  },
-  profilePhoto: {
-    height: 60,
-    width: 60,
-    borderRadius: 16,
-    marginRight: 8,
-  },
-  profileInfo: { alignItems: 'center', justifyContent: 'center' },
-
-  profileName: {
-    fontSize: 13,
-    fontWeight: 'bold',
-  },
-  profileMail: {
-    fontSize: 16,
-    color: 'gray',
-  },
-});
 
 export default PostsScreen;
