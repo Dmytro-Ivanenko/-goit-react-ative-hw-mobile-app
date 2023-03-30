@@ -13,8 +13,10 @@ import {
   Dimensions,
   Keyboard,
 } from 'react-native';
+
 import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
+import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('window');
@@ -34,6 +36,7 @@ const CreatePostScreen = ({ navigation }) => {
       (async () => {
         await MediaLibrary.requestPermissionsAsync();
         await requestPermission();
+        await Location.requestForegroundPermissionsAsync();
       })();
 
       setScreenFocus(true);
@@ -53,13 +56,17 @@ const CreatePostScreen = ({ navigation }) => {
     setImage(uri);
   };
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     console.log('Фото опубліковане');
+
+    const geoPosition = await Location.getCurrentPositionAsync({});
+    console.log(geoPosition);
 
     const postData = {
       image,
       title,
       location,
+      geoPosition,
     };
 
     setImage('');

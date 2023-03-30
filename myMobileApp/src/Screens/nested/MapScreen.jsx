@@ -15,7 +15,7 @@ import {
 const MapScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text>CreatMapScreenePostScreen</Text>
+      <Text>MapScreene</Text>
     </View>
   );
 };
