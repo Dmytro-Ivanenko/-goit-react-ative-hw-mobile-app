@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  Platform,
-  KeyboardAvoidingView,
-  Keyboard,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+
+import PostItem from '../../Components/PostItem/PostItem';
 
 const PostsScreen = ({ route }) => {
   const [posts, setPosts] = useState([]);
@@ -40,6 +31,18 @@ const PostsScreen = ({ route }) => {
           <Text style={styles.profileMail}>email@example.com</Text>
         </View>
       </View>
+
+      <FlatList
+        data={posts}
+        renderItem={({ item }) => (
+          <PostItem
+            image={item.image}
+            title={item.title}
+            location={item.location}
+          />
+        )}
+        keyExtractor={(item, index) => index.toString()}
+      />
     </View>
   );
 };
@@ -56,6 +59,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignSelf: 'flex-start',
+    marginBottom: 32,
   },
   profilePhoto: {
     height: 60,
