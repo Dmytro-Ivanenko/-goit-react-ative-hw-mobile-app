@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   StyleSheet,
   Text,
@@ -24,15 +25,23 @@ const CreatePostScreen = ({ navigation }) => {
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [cameraRef, setCameraRef] = useState(null);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [isScreenFocused, setScreenFocus] = useState(false);
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
 
-  useEffect(() => {
-    (async () => {
-      await MediaLibrary.requestPermissionsAsync();
-      await requestPermission();
-    })();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      (async () => {
+        await MediaLibrary.requestPermissionsAsync();
+        await requestPermission();
+      })();
+
+      setScreenFocus(true);
+      return () => {
+        setScreenFocus(false);
+      };
+    }, [navigation])
+  );
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
@@ -66,34 +75,36 @@ const CreatePostScreen = ({ navigation }) => {
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <View style={styles.cameraContainer}>
-          <Camera
-            style={{
-              ...styles.camera,
-              height: isShowKeyboard ? 100 : cameraHeight,
-            }}
-            type={CameraType.back}
-            ref={setCameraRef}
-            ratio="1:1"
-          >
-            {image && (
-              <View style={styles.photoContainer}>
-                <Image
-                  source={{ uri: image }}
-                  style={{ height: 100, width: 100 }}
-                />
-              </View>
-            )}
-
-            <TouchableOpacity
-              style={styles.cameraIconContainer}
-              onPress={handleImageUpload}
+        {isScreenFocused && (
+          <View style={styles.cameraContainer}>
+            <Camera
+              style={{
+                ...styles.camera,
+                height: isShowKeyboard ? 100 : cameraHeight,
+              }}
+              type={CameraType.back}
+              ref={setCameraRef}
+              ratio="1:1"
             >
-              <Ionicons name="camera" size={24} color="#fff" />
-            </TouchableOpacity>
-          </Camera>
-          <Text style={{ color: '#BDBDBD' }}>Завантажте фото</Text>
-        </View>
+              {image && (
+                <View style={styles.photoContainer}>
+                  <Image
+                    source={{ uri: image }}
+                    style={{ height: 100, width: 100 }}
+                  />
+                </View>
+              )}
+
+              <TouchableOpacity
+                style={styles.cameraIconContainer}
+                onPress={handleImageUpload}
+              >
+                <Ionicons name="camera" size={24} color="#fff" />
+              </TouchableOpacity>
+            </Camera>
+            <Text style={{ color: '#BDBDBD' }}>Завантажте фото</Text>
+          </View>
+        )}
 
         <TextInput
           style={styles.input}

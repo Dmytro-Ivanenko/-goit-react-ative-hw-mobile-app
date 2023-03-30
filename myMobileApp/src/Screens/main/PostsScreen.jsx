@@ -25,9 +25,8 @@ const PostsScreen = ({ route }) => {
     setPosts(prevState => {
       return [...prevState, { image, title, location }];
     });
-
-    console.log(posts);
   }, [route.params]);
+  console.log(posts);
 
   return (
     <View style={styles.container}>
