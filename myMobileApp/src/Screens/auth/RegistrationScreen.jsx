@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   StyleSheet,
   Text,
@@ -12,9 +13,11 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
+import { signUp } from '../../redux/auth/authOperations';
+
 const initValue = {
   login: '',
-  name: '',
+  email: '',
   password: '',
 };
 
@@ -25,13 +28,16 @@ const RegistrationScreen = ({ navigation }) => {
   const [isFocusMail, setIsFocusMail] = useState(false);
   const [isFocusPassword, setIsFocusPassword] = useState(false);
 
+  const dispatch = useDispatch();
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
   };
 
   const handleSubmit = () => {
-    console.log(value);
+    dispatch(signUp(value));
+
     setValue(initValue);
     navigation.navigate('Home');
   };
@@ -77,7 +83,7 @@ const RegistrationScreen = ({ navigation }) => {
                   ...(isFocusMail ? styles.inputFocus : null),
                 }}
                 placeholder="Адреса електронної пошти"
-                value={value.name}
+                value={value.email}
                 onFocus={() => {
                   setIsShowKeyboard(true), setIsFocusMail(true);
                 }}
@@ -85,7 +91,7 @@ const RegistrationScreen = ({ navigation }) => {
                 onChangeText={value =>
                   setValue(prevState => ({
                     ...prevState,
-                    name: value,
+                    email: value,
                   }))
                 }
               />

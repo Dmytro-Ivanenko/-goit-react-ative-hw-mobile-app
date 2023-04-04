@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
-const MapScreen = ({ navigation, route }) => {
+const MapScreen = ({ route }) => {
   console.log(route.params);
   const { geoPosition, locationTitle } = route.params.location;
   const { latitude, longitude } = geoPosition.coords;

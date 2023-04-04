@@ -3,8 +3,7 @@ import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 const PostItem = ({ image, title, location, navigation }) => {
-  console.log(location);
-  const { locationTitle, geoPosition } = location;
+  const { locationTitle } = location;
 
   return (
     <View style={styles.PostContainer}>
