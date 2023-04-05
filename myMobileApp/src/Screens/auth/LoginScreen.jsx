@@ -36,9 +36,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleSubmit = () => {
     dispatch(logIn(value));
-
     setValue(initValue);
-    navigation.navigate('Home');
   };
 
   return (

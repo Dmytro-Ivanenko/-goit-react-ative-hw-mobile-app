@@ -37,9 +37,7 @@ const RegistrationScreen = ({ navigation }) => {
 
   const handleSubmit = () => {
     dispatch(signUp(value));
-
     setValue(initValue);
-    navigation.navigate('Home');
   };
 
   return (

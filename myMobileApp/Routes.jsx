@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 import db from './src/firebase/config';
 import useRoute from './src/shared/hooks/useRout';
+import { isUserLogin } from './src/redux/auth/authOperations';
+import { getIsUserLogin } from './src/redux/selectors';
 
 // import * as Font from 'expo-font';
 // import { AppLoading } from 'expo';
@@ -20,14 +23,14 @@ const auth = getAuth(db);
 // };
 
 export default function Routes() {
-  // const [isReady, setIsReady] = useState(false);
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+  const userAuthorization = useSelector(getIsUserLogin);
 
-  onAuthStateChanged(auth, user => {
-    setUser(user);
-  });
+  useEffect(() => {
+    dispatch(isUserLogin());
+  }, []);
 
-  const routing = useRoute(user);
+  const routing = useRoute(userAuthorization);
   //   if (!isReady) {
   //     return (
   //       <AppLoading
