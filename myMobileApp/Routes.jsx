@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
+import db from './src/firebase/config';
+import useRoute from './src/shared/hooks/useRout';
 
 // import * as Font from 'expo-font';
 // import { AppLoading } from 'expo';
 
-// screens
-import LoginScreen from './src/Screens/auth/LoginScreen';
-import RegistrationScreen from './src/Screens/auth/RegistrationScreen';
-import Home from './src/Screens/main/Home';
-
 // options
-
-const AuthStack = createStackNavigator();
+const auth = getAuth(db);
 
 // const loadApplication = async () => {
 //   await Font.loadAsync({
@@ -22,31 +19,15 @@ const AuthStack = createStackNavigator();
 //   });
 // };
 
-const useRoute = isAuth => {
-  return (
-    <AuthStack.Navigator initialRouteName="Login">
-      <AuthStack.Screen
-        options={{ headerShown: false }}
-        name="Registration"
-        component={RegistrationScreen}
-      />
-      <AuthStack.Screen
-        options={{ headerShown: false }}
-        name="Login"
-        component={LoginScreen}
-      />
-      <AuthStack.Screen
-        options={{ headerShown: false }}
-        name="Home"
-        component={Home}
-      />
-    </AuthStack.Navigator>
-  );
-};
-
 export default function Routes() {
   // const [isReady, setIsReady] = useState(false);
-  const routing = useRoute();
+  const [user, setUser] = useState(null);
+
+  onAuthStateChanged(auth, user => {
+    setUser(user);
+  });
+
+  const routing = useRoute(user);
   //   if (!isReady) {
   //     return (
   //       <AppLoading

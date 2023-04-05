@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   StyleSheet,
   Text,
@@ -13,8 +14,10 @@ import {
   Button,
 } from 'react-native';
 
+import { logIn } from '../../redux/auth/authOperations';
+
 const initValue = {
-  name: '',
+  email: '',
   password: '',
 };
 
@@ -23,14 +26,17 @@ const LoginScreen = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [isFocusMail, setIsFocusMail] = useState(false);
   const [isFocusPassword, setIsFocusPassword] = useState(false);
-  `1`;
+
+  const dispatch = useDispatch();
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
   };
 
   const handleSubmit = () => {
-    console.log(value);
+    dispatch(logIn(value));
+
     setValue(initValue);
     navigation.navigate('Home');
   };
@@ -56,7 +62,7 @@ const LoginScreen = ({ navigation }) => {
                   ...(isFocusMail ? styles.inputFocus : null),
                 }}
                 placeholder="Адреса електронної пошти"
-                value={value.name}
+                value={value.email}
                 onFocus={() => {
                   setIsShowKeyboard(true), setIsFocusMail(true);
                 }}
@@ -64,7 +70,7 @@ const LoginScreen = ({ navigation }) => {
                 onChangeText={value =>
                   setValue(prevState => ({
                     ...prevState,
-                    name: value,
+                    email: value,
                   }))
                 }
               />
