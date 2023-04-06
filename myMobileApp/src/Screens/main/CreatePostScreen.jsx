@@ -13,11 +13,15 @@ import {
   Dimensions,
   Keyboard,
 } from 'react-native';
+import { getStorage, ref, uploadBytes } from 'firebase/storage';
+import { nanoid } from 'nanoid';
 
 import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
+
+import db from '../../firebase/config';
 
 const { width } = Dimensions.get('window');
 const cameraHeight = width - 32;
@@ -58,8 +62,26 @@ const CreatePostScreen = ({ navigation }) => {
   };
 
   // Publication
+
+  const addPhotoToServer = async () => {
+    const response = await fetch(image);
+    const file = await response.blob();
+    const photoID = nanoid();
+
+    const storage = getStorage();
+    const storageRef = ref(storage, `postImages/${photoID}`);
+
+    const data = await uploadBytes(storageRef, file);
+
+    console.log(data);
+  };
+
   const handlePublish = async () => {
-    console.log('Фото опубліковане');
+    try {
+      await addPhotoToServer();
+    } catch (error) {
+      console.log(error);
+    }
 
     const geoPosition = await Location.getCurrentPositionAsync({});
 
@@ -75,10 +97,11 @@ const CreatePostScreen = ({ navigation }) => {
     setImage('');
     setTitle('');
     setLocationTitle('');
-
+    console.log('Фото опубліковане');
     navigation.navigate('Пости', postData);
   };
 
+  // Screen
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <KeyboardAvoidingView
