@@ -13,19 +13,23 @@ import {
   Dimensions,
   Keyboard,
 } from 'react-native';
-import { getStorage, ref, uploadBytes } from 'firebase/storage';
-import { nanoid } from 'nanoid';
 
+//Firebase
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { collection, addDoc } from 'firebase/firestore';
+import { nanoid } from 'nanoid';
+import { fireStore } from '../../firebase/config';
+
+//Expo
 import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
 
-import db from '../../firebase/config';
-
 const { width } = Dimensions.get('window');
 const cameraHeight = width - 32;
 
+//Component
 const CreatePostScreen = ({ navigation }) => {
   const [image, setImage] = useState('');
   const [permission, requestPermission] = Camera.useCameraPermissions();
@@ -61,47 +65,71 @@ const CreatePostScreen = ({ navigation }) => {
     setImage(uri);
   };
 
-  // Publication
+  // ========= Publication
 
   const addPhotoToServer = async () => {
-    const response = await fetch(image);
-    const file = await response.blob();
-    const photoID = nanoid();
+    try {
+      const response = await fetch(image);
+      const file = await response.blob();
+      const photoID = nanoid();
 
-    const storage = getStorage();
-    const storageRef = ref(storage, `postImages/${photoID}`);
+      const storage = getStorage();
+      const storageRef = ref(storage, `postImages/${photoID}`);
 
-    const data = await uploadBytes(storageRef, file);
+      // add photo to storage
+      await uploadBytes(storageRef, file);
 
-    console.log(data);
+      const downloadURL = await getDownloadURL(
+        ref(storage, `postImages/${photoID}`)
+      );
+      return downloadURL;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // add photo to server
+  const addPostToServer = async () => {
+    try {
+      const photoURL = await addPhotoToServer();
+      console.log(photoURL);
+      const docRef = await addDoc(collection(fireStore, 'posts'), {
+        title,
+        geoPosition: 'test',
+        locationTitle,
+        photoURL,
+      });
+      console.log('Document written: ', docRef);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const handlePublish = async () => {
     try {
-      await addPhotoToServer();
+      addPostToServer();
+      const geoPosition = await Location.getCurrentPositionAsync({});
+
+      const postData = {
+        image,
+        title,
+        locationData: {
+          geoPosition,
+          locationTitle,
+        },
+      };
+
+      setImage('');
+      setTitle('');
+      setLocationTitle('');
+      console.log('Фото опубліковане');
+      navigation.navigate('Пости', postData);
     } catch (error) {
       console.log(error);
     }
-
-    const geoPosition = await Location.getCurrentPositionAsync({});
-
-    const postData = {
-      image,
-      title,
-      locationData: {
-        geoPosition,
-        locationTitle,
-      },
-    };
-
-    setImage('');
-    setTitle('');
-    setLocationTitle('');
-    console.log('Фото опубліковане');
-    navigation.navigate('Пости', postData);
   };
 
-  // Screen
+  // =========== Screen
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <KeyboardAvoidingView

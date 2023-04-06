@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
-import db from './src/firebase/config';
+import { db } from './src/firebase/config';
 import useRoute from './src/shared/hooks/useRout';
 import { isUserLogin } from './src/redux/auth/authOperations';
 import { getIsUserLogin } from './src/redux/selectors';
