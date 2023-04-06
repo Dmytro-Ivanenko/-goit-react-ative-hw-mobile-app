@@ -25,12 +25,12 @@ const auth = getAuth(db);
 export default function Routes() {
   const dispatch = useDispatch();
   const userAuthorization = useSelector(getIsUserLogin);
+  const routing = useRoute(userAuthorization);
 
   useEffect(() => {
     dispatch(isUserLogin());
   }, []);
 
-  const routing = useRoute(userAuthorization);
   //   if (!isReady) {
   //     return (
   //       <AppLoading

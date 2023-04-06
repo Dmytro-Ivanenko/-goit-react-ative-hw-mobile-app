@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   updateProfile,
+  signOut,
 } from 'firebase/auth';
 
 export const auth = getAuth(db);
@@ -49,10 +50,9 @@ export const logIn = createAsyncThunk(
 
 export const logOut = createAsyncThunk(
   'auth/logout',
-  async (profileData, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      //   const response = await Api.logout(profileData);
-      //   return response;
+      await auth.signOut();
     } catch ({ response }) {
       return rejectWithValue(response.data);
     }
