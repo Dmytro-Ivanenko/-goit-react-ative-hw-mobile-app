@@ -3,5 +3,6 @@ export const getUserData = ({ auth }) => {
   return {
     login: auth.login,
     email: auth.email,
+    uid: auth.userID,
   };
 };

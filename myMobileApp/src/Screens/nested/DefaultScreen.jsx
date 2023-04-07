@@ -1,22 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import { collection, getDocs } from 'firebase/firestore';
 
+import { fireStore } from '../../firebase/config';
 import PostItem from '../../Components/PostItem/PostItem';
 
 const DefaultScreen = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
 
-  useEffect(() => {
-    if (!route.params) {
-      return;
-    }
+  const getAllPosts = async () => {
+    const querySnapshot = await getDocs(collection(fireStore, 'posts'));
 
-    const { image, title, locationData } = route.params;
-
-    setPosts(prevState => {
-      return [...prevState, { image, title, locationData }];
+    const postsArr = querySnapshot.docs.map(doc => {
+      return doc.data();
     });
-  }, [route.params]);
+
+    setPosts(postsArr);
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getAllPosts();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -35,7 +42,7 @@ const DefaultScreen = ({ route, navigation }) => {
         data={posts}
         renderItem={({ item }) => (
           <PostItem
-            image={item.image}
+            image={item.photoURL}
             title={item.title}
             location={item.locationData}
             navigation={navigation}

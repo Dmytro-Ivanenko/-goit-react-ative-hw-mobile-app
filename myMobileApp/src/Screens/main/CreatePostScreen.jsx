@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 import {
   StyleSheet,
   Text,
@@ -29,7 +30,10 @@ import { Ionicons } from '@expo/vector-icons';
 const { width } = Dimensions.get('window');
 const cameraHeight = width - 32;
 
-//Component
+//Selector
+import { getUserData } from '../../redux/selectors';
+
+//============= Component
 const CreatePostScreen = ({ navigation }) => {
   const [image, setImage] = useState('');
   const [permission, requestPermission] = Camera.useCameraPermissions();
@@ -38,6 +42,7 @@ const CreatePostScreen = ({ navigation }) => {
   const [isScreenFocused, setScreenFocus] = useState(false);
   const [title, setTitle] = useState('');
   const [locationTitle, setLocationTitle] = useState('');
+  const { login, uid } = useSelector(getUserData);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -91,15 +96,15 @@ const CreatePostScreen = ({ navigation }) => {
   // add photo to server
   const addPostToServer = async () => {
     try {
+      const geoPosition = await Location.getCurrentPositionAsync({});
       const photoURL = await addPhotoToServer();
-      console.log(photoURL);
-      const docRef = await addDoc(collection(fireStore, 'posts'), {
+      await addDoc(collection(fireStore, 'posts'), {
+        uid,
+        login,
         title,
-        geoPosition: 'test',
-        locationTitle,
+        locationData: { geoPosition, locationTitle },
         photoURL,
       });
-      console.log('Document written: ', docRef);
     } catch (e) {
       console.error(e);
     }
@@ -107,23 +112,14 @@ const CreatePostScreen = ({ navigation }) => {
 
   const handlePublish = async () => {
     try {
-      addPostToServer();
-      const geoPosition = await Location.getCurrentPositionAsync({});
-
-      const postData = {
-        image,
-        title,
-        locationData: {
-          geoPosition,
-          locationTitle,
-        },
-      };
+      await addPostToServer();
 
       setImage('');
       setTitle('');
       setLocationTitle('');
+
       console.log('Фото опубліковане');
-      navigation.navigate('Пости', postData);
+      navigation.navigate('Пости');
     } catch (error) {
       console.log(error);
     }
