@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  FlatList,
+  ImageBackground,
+} from 'react-native';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
 import { fireStore } from '../../firebase/config';
@@ -12,7 +19,7 @@ import { getUserData } from '../../redux/selectors';
 const ProfileScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
 
-  const { login, email, uid } = useSelector(getUserData);
+  const { login, uid } = useSelector(getUserData);
 
   // FUNCTIONS
   const getUserPosts = async () => {
@@ -35,60 +42,79 @@ const ProfileScreen = ({ navigation }) => {
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.profileContainer}>
-        <Image
-          style={styles.profilePhoto}
-          source={require('../../images/profilePhoto.jpg')}
-        />
-        <View style={styles.profileInfo}>
-          <Text style={styles.profileName}>{login}</Text>
-          <Text style={styles.profileMail}>{email}</Text>
-        </View>
-      </View>
-
-      <FlatList
-        data={posts}
-        renderItem={({ item }) => (
-          <PostItem
-            id={item.id}
-            image={item.photoURL}
-            title={item.title}
-            location={item.locationData}
-            comments={item.comments}
-            navigation={navigation}
+    <ImageBackground
+      style={styles.bcgImage}
+      source={require('../../images/PhotoBG.png')}
+    >
+      <View style={styles.container}>
+        <View style={styles.profileContainer}>
+          <Image
+            style={styles.profilePhoto}
+            source={require('../../images/profilePhoto.jpg')}
           />
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
-    </View>
+          <View style={styles.profileInfo}>
+            <Text style={styles.profileName}>{login}</Text>
+          </View>
+        </View>
+
+        <FlatList
+          data={posts}
+          renderItem={({ item }) => (
+            <PostItem
+              id={item.id}
+              image={item.photoURL}
+              title={item.title}
+              location={item.locationData}
+              comments={item.comments}
+              navigation={navigation}
+            />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 32,
+    width: '100%',
+    height: '100%',
     paddingRight: 16,
     paddingLeft: 16,
+    paddingBottom: 100,
+    marginBottom: -100,
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
     backgroundColor: '#fff',
   },
+  bcgImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'flex-end',
+  },
   profileContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
-    alignSelf: 'flex-start',
-    marginBottom: 32,
+    alignItems: 'center',
+
+    marginBottom: 16,
   },
   profilePhoto: {
-    height: 60,
-    width: 60,
+    height: 120,
+    width: 120,
     borderRadius: 16,
-    marginRight: 8,
+    marginBottom: 16,
+    marginTop: -60,
   },
-  profileInfo: { alignItems: 'center', justifyContent: 'center' },
+  profileInfo: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 
   profileName: {
-    fontSize: 13,
+    fontSize: 30,
+    lineHeight: 35,
     fontWeight: 'bold',
   },
   profileMail: {

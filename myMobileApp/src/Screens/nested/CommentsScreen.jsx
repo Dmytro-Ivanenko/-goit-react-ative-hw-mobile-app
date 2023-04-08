@@ -105,10 +105,14 @@ const CommentsScreen = ({ route }) => {
           />
           <TouchableOpacity
             disabled={!comment}
-            style={styles.addCommentButton}
+            // style={styles.addCommentButton}
+            style={{
+              ...styles.addCommentButton,
+              ...(comment ? styles.activeButton : styles.disabledButton),
+            }}
             onPress={handleSendComment}
           >
-            <Feather name="arrow-up" size={24} color="black" />
+            <Feather name="arrow-up" size={24} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -119,15 +123,17 @@ const CommentsScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 32,
+    paddingTop: 16,
     paddingRight: 16,
     paddingLeft: 16,
+    paddingBottom: 8,
     backgroundColor: '#fff',
   },
   image: {
-    height: 300,
+    height: 240,
     resizeMode: 'cover',
     marginBottom: 16,
+    borderRadius: 16,
   },
   commentsContainer: {
     flex: 1,
@@ -135,31 +141,33 @@ const styles = StyleSheet.create({
   addComment: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: Platform.OS === 'ios' ? 16 : 0,
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
+    backgroundColor: '#F6F6F6',
+    borderRadius: 100,
+    marginTop: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingRight: 8,
   },
   input: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
     marginRight: 16,
-    paddingLeft: 8,
+    paddingLeft: 16,
     paddingRight: 8,
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingTop: 8,
+    paddingBottom: 8,
     fontSize: 16,
-    minHeight: 40,
   },
   addCommentButton: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    borderRadius: 100,
+    width: 34,
+    height: 34,
   },
+
+  activeButton: { backgroundColor: '#FF6C00' },
+  disabledButton: { backgroundColor: '#F6F6F6' },
   commentContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
