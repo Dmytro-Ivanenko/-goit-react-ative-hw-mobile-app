@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
 import { collection, getDocs } from 'firebase/firestore';
@@ -6,20 +7,22 @@ import { collection, getDocs } from 'firebase/firestore';
 import { fireStore } from '../../firebase/config';
 import PostItem from '../../Components/PostItem/PostItem';
 import { getUserData } from '../../redux/selectors';
-import { useSelector } from 'react-redux';
 
 // Component
-const DefaultScreen = ({ route, navigation }) => {
+const DefaultScreen = ({ _, navigation }) => {
   const [posts, setPosts] = useState([]);
 
   const { login, email } = useSelector(getUserData);
 
+  // FUNCTIONS
   const getAllPosts = async () => {
     const querySnapshot = await getDocs(collection(fireStore, 'posts'));
 
     const postsArr = querySnapshot.docs.map(doc => {
       return { ...doc.data(), id: doc.id };
     });
+
+    console.log(postsArr);
     setPosts(postsArr);
   };
 
@@ -50,6 +53,7 @@ const DefaultScreen = ({ route, navigation }) => {
             image={item.photoURL}
             title={item.title}
             location={item.locationData}
+            comments={item.comments}
             navigation={navigation}
           />
         )}

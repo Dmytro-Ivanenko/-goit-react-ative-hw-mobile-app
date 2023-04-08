@@ -3,12 +3,19 @@ import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 // Component
-const PostItem = ({ image, title, id, location, navigation }) => {
+const PostItem = ({
+  image,
+  title,
+  id,
+  location,
+  comments = [],
+  navigation,
+}) => {
   const { locationTitle } = location;
 
   return (
     <View style={styles.PostContainer}>
-      <Image style={styles.image} source={{ uri: image }}></Image>
+      <Image style={styles.image} source={{ uri: image }} />
       <Text style={styles.Title}>{title}</Text>
 
       <View style={styles.addInfoContainer}>
@@ -19,7 +26,7 @@ const PostItem = ({ image, title, id, location, navigation }) => {
           }}
         >
           <Feather name="message-circle" size={24} color="#BDBDBD" />
-          <Text style={styles.addInfoText}>0</Text>
+          <Text style={styles.addInfoText}>{comments.length}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
