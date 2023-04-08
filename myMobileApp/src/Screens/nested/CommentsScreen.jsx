@@ -105,7 +105,6 @@ const CommentsScreen = ({ route }) => {
           />
           <TouchableOpacity
             disabled={!comment}
-            // style={styles.addCommentButton}
             style={{
               ...styles.addCommentButton,
               ...(comment ? styles.activeButton : styles.disabledButton),

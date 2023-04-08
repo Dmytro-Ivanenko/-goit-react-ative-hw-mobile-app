@@ -22,7 +22,6 @@ const DefaultScreen = ({ _, navigation }) => {
       return { ...doc.data(), id: doc.id };
     });
 
-    console.log(postsArr);
     setPosts(postsArr);
   };
 
