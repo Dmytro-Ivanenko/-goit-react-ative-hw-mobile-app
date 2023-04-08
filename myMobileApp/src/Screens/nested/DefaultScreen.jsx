@@ -5,17 +5,21 @@ import { collection, getDocs } from 'firebase/firestore';
 
 import { fireStore } from '../../firebase/config';
 import PostItem from '../../Components/PostItem/PostItem';
+import { getUserData } from '../../redux/selectors';
+import { useSelector } from 'react-redux';
 
+// Component
 const DefaultScreen = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
+
+  const { login, email } = useSelector(getUserData);
 
   const getAllPosts = async () => {
     const querySnapshot = await getDocs(collection(fireStore, 'posts'));
 
     const postsArr = querySnapshot.docs.map(doc => {
-      return doc.data();
+      return { ...doc.data(), id: doc.id };
     });
-
     setPosts(postsArr);
   };
 
@@ -33,8 +37,8 @@ const DefaultScreen = ({ route, navigation }) => {
           source={require('../../images/profilePhoto.jpg')}
         />
         <View style={styles.profileInfo}>
-          <Text style={styles.profileName}>Natali Romanova</Text>
-          <Text style={styles.profileMail}>email@example.com</Text>
+          <Text style={styles.profileName}>{login}</Text>
+          <Text style={styles.profileMail}>{email}</Text>
         </View>
       </View>
 
@@ -42,6 +46,7 @@ const DefaultScreen = ({ route, navigation }) => {
         data={posts}
         renderItem={({ item }) => (
           <PostItem
+            id={item.id}
             image={item.photoURL}
             title={item.title}
             location={item.locationData}

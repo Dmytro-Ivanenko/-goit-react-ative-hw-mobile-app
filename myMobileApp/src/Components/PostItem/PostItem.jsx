@@ -2,7 +2,8 @@ import React from 'react';
 import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
-const PostItem = ({ image, title, location, navigation }) => {
+// Component
+const PostItem = ({ image, title, id, location, navigation }) => {
   const { locationTitle } = location;
 
   return (
@@ -14,7 +15,7 @@ const PostItem = ({ image, title, location, navigation }) => {
         <TouchableOpacity
           style={styles.comments}
           onPress={() => {
-            navigation.navigate('Коментарі');
+            navigation.navigate('Коментарі', { postId: id, image });
           }}
         >
           <Feather name="message-circle" size={24} color="#BDBDBD" />
