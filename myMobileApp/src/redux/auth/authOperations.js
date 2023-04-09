@@ -66,7 +66,9 @@ export const isUserLogin = createAsyncThunk(
       return new Promise((resolve, reject) => {
         onAuthStateChanged(auth, user => {
           if (user) {
-            resolve(user);
+            const { uid, displayName, email } = user;
+
+            resolve({ uid, displayName, email });
           } else {
             reject(null);
           }
