@@ -6,3 +6,7 @@ export const getUserData = ({ auth }) => {
     uid: auth.userID,
   };
 };
+
+export const isLoading = ({ auth }) => {
+  return auth.loading;
+};

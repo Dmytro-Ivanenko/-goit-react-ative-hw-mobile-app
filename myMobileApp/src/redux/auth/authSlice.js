@@ -9,6 +9,7 @@ const authSlice = createSlice({
     login: null,
     email: null,
     userAuthorized: false,
+    loading: false,
   },
   extraReducers: builder => {
     builder
@@ -38,15 +39,19 @@ const authSlice = createSlice({
       })
 
       //is user authorized
+      .addCase(isUserLogin.pending, state => {
+        state.loading = true;
+      })
       .addCase(isUserLogin.fulfilled, (state, { payload }) => {
         state.userAuthorized = true;
         state.userID = payload.uid;
         state.login = payload.displayName;
         state.email = payload.email;
+        state.loading = false;
       })
       .addCase(isUserLogin.rejected, state => {
-        console.log('isUserLogin rejected');
         state.userAuthorized = false;
+        state.loading = false;
       });
   },
 });

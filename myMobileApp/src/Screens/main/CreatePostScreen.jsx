@@ -186,7 +186,7 @@ const CreatePostScreen = ({ navigation }) => {
           }}
         />
         <TouchableOpacity
-          disabled={!title || !locationTitle || !image}
+          disabled={!title || !locationTitle || !image || loading}
           style={{
             ...styles.uploadButton,
             ...(image && title && locationTitle
